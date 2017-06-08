@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)startIAP {
     [self sdlex_updateProxyState:ProxyStateSearchingForConnection];
-    SDLLifecycleConfiguration *lifecycleConfig = [self.class setLifecycleConfigurationPropertiesOnConfiguration:[SDLLifecycleConfiguration defaultConfigurationWithAppName:SDLAppName appId:SDLAppId]];
+    SDLLifecycleConfiguration *lifecycleConfig = [self.class setLifecycleConfigurationPropertiesOnConfiguration:[SDLLifecycleConfiguration defaultConfigurationWithAppName:SDLAppName appId:SDLAppId transportType:SDLTransportTypeIAP]];
     
     // Assume this is production and disable logging
     lifecycleConfig.logFlags = SDLLogOutputNone;
@@ -85,6 +85,20 @@ NS_ASSUME_NONNULL_BEGIN
     [self sdlex_updateProxyState:ProxyStateSearchingForConnection];
     SDLLifecycleConfiguration *lifecycleConfig = [self.class setLifecycleConfigurationPropertiesOnConfiguration:[SDLLifecycleConfiguration debugConfigurationWithAppName:SDLAppName appId:SDLAppId ipAddress:[Preferences sharedPreferences].ipAddress port:[Preferences sharedPreferences].port]];
     SDLConfiguration *config = [SDLConfiguration configurationWithLifecycle:lifecycleConfig lockScreen:[SDLLockScreenConfiguration enabledConfiguration]];
+    self.sdlManager = [[SDLManager alloc] initWithConfiguration:config delegate:self];
+    
+    [self startManager];
+}
+
+- (void)startUSBMUXD {
+    [self sdlex_updateProxyState:ProxyStateSearchingForConnection];
+    SDLLifecycleConfiguration *lifecycleConfig = [self.class setLifecycleConfigurationPropertiesOnConfiguration:[SDLLifecycleConfiguration defaultConfigurationWithAppName:SDLAppName appId:SDLAppId transportType:SDLTransportTypeUSBMUXD]];
+    lifecycleConfig.resumeHash = @"1000001";
+    
+    // Assume this is production and disable logging
+    lifecycleConfig.logFlags = SDLLogOutputNone;
+    
+    SDLConfiguration *config = [SDLConfiguration configurationWithLifecycle:lifecycleConfig lockScreen:[SDLLockScreenConfiguration disabledConfiguration]];
     self.sdlManager = [[SDLManager alloc] initWithConfiguration:config delegate:self];
     
     [self startManager];
