@@ -8,6 +8,7 @@
 #import "ConnectionIAPTableViewController.h"
 #import "ConnectionTransitionContext.h"
 #import "ConnectionAnimatedTransition.h"
+#import "ConnectionUSBMUXDTableViewController.h"
 
 
 
@@ -33,9 +34,11 @@
     // Setup the child VCs
     UIStoryboard *tcpControllerStoryboard = [UIStoryboard storyboardWithName:@"ConnectionTCPTableViewController" bundle:[NSBundle mainBundle]];
     UIStoryboard *iapControllerStoryboard = [UIStoryboard storyboardWithName:@"ConnectionIAPTableViewController" bundle:[NSBundle mainBundle]];
+    UIStoryboard *usbmuxdControllerStoryboard = [UIStoryboard storyboardWithName:@"ConnectionUSBMUXDTableViewController" bundle:[NSBundle mainBundle]];
     ConnectionTCPTableViewController *tcpController = [tcpControllerStoryboard instantiateInitialViewController];
     ConnectionIAPTableViewController *iapController = [iapControllerStoryboard instantiateInitialViewController];
-    self.viewControllers = @[tcpController, iapController];
+    ConnectionUSBMUXDTableViewController *usbmuxdController = [usbmuxdControllerStoryboard instantiateInitialViewController];
+    self.viewControllers = @[tcpController, iapController, usbmuxdController];
     
     // Setup the pan gesture
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognizerDidFire:)];
@@ -67,6 +70,10 @@
 #pragma mark - Gestures
 
 - (void)panGestureRecognizerDidFire:(UIPanGestureRecognizer *)gesture {
+    if (gesture.state != UIGestureRecognizerStateEnded) {
+        return;
+    }
+    
     BOOL goingRight = ([gesture velocityInView:gesture.view].x < 0.0f);
     
     NSUInteger currentSegmentIndex = self.connectionTypeSegmentedControl.selectedSegmentIndex;
@@ -95,7 +102,7 @@
     
     [self.currentViewController willMoveToParentViewController:nil];
     [self addChildViewController:toViewController];
-
+    
     id<UIViewControllerAnimatedTransitioning> animator = [[ConnectionAnimatedTransition alloc] init];
     NSUInteger fromIndex = [self.viewControllers indexOfObject:self.currentViewController];
     

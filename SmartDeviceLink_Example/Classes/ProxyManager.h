@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, ProxyState) {
 + (instancetype)sharedManager;
 - (void)startIAP;
 - (void)startTCP;
+- (void)startUSBMUXD;
 - (void)reset;
 
 @end

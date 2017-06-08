@@ -12,6 +12,7 @@ typedef NS_ENUM(UInt8, SDLDebugType) {
     SDLDebugType_Debug = 0,
     SDLDebugType_Transport_iAP = 1,
     SDLDebugType_Transport_TCP = 2,
+    SDLDebugType_Transport_USBMUXD = 6,
     SDLDebugType_Protocol = 3,
     SDLDebugType_RPC = 4,
     SDLDebugType_APP = 5

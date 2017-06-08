@@ -23,6 +23,12 @@ typedef NS_OPTIONS(NSUInteger, SDLLogOutput) {
     SDLLogOutputSiphon = 1 << 2
 };
 
+typedef NS_ENUM(NSInteger, SDLTransportType) {
+    SDLTransportTypeTCP = 0,
+    SDLTransportTypeIAP = 1,
+    SDLTransportTypeUSBMUXD = 2
+};
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -38,10 +44,11 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param appName The name of the app.
  *  @param appId   The appId to be used. This should be registered with the radio's manufacturer.
+ *  @param transportType The transport type.
  *
  *  @return The lifecycle configuration
  */
-+ (SDLLifecycleConfiguration *)defaultConfigurationWithAppName:(NSString *)appName appId:(NSString *)appId;
++ (SDLLifecycleConfiguration *)defaultConfigurationWithAppName:(NSString *)appName appId:(NSString *)appId transportType:(SDLTransportType)transportType;
 
 /**
  *  A debug configuration that runs using TCP. Additional functionality should be customized on the properties.
@@ -134,6 +141,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  Which logging capabilities are currently enabled. The default is Console logging only.
  */
 @property (assign, nonatomic) SDLLogOutput logFlags;
+
+/**
+ * The transport type.
+ */
+@property (assign, nonatomic) SDLTransportType transportType;
 
 @end
 
