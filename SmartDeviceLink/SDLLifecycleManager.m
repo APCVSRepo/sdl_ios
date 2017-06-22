@@ -77,7 +77,7 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
 #pragma mark Lifecycle
 
 - (instancetype)init {
-    return [self initWithConfiguration:[SDLConfiguration configurationWithLifecycle:[SDLLifecycleConfiguration defaultConfigurationWithAppName:@"SDL APP" appId:@"001"] lockScreen:[SDLLockScreenConfiguration disabledConfiguration]] delegate:nil];
+    return [self initWithConfiguration:[SDLConfiguration configurationWithLifecycle:[SDLLifecycleConfiguration defaultConfigurationWithAppName:@"SDL APP" appId:@"001" transportType:SDLTransportTypeTCP] lockScreen:[SDLLockScreenConfiguration disabledConfiguration]] delegate:nil];
 }
 
 - (instancetype)initWithConfiguration:(SDLConfiguration *)configuration delegate:(nullable id<SDLManagerDelegate>)delegate {
@@ -166,10 +166,10 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
 // Start up the internal proxy object
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if (self.configuration.lifecycleConfig.tcpDebugMode) {
-        self.proxy = [SDLProxyFactory buildSDLProxyWithListener:self.notificationDispatcher tcpIPAddress:self.configuration.lifecycleConfig.tcpDebugIPAddress tcpPort:[@(self.configuration.lifecycleConfig.tcpDebugPort) stringValue]];
-    } else {
-        self.proxy = [SDLProxyFactory buildSDLProxyWithListener:self.notificationDispatcher];
+    if (self.configuration.lifecycleConfig.transportType == SDLTransportTypeTCP) {
+        self.proxy = [SDLProxyFactory buildSDLProxyWithTCPListener:self.notificationDispatcher tcpIPAddress:self.configuration.lifecycleConfig.tcpDebugIPAddress tcpPort:[@(self.configuration.lifecycleConfig.tcpDebugPort) stringValue]];
+    } else if (self.configuration.lifecycleConfig.transportType == SDLTransportTypeIAP) {
+        self.proxy = [SDLProxyFactory buildSDLProxyWithiAPListener:self.notificationDispatcher];
     }
 #pragma clang diagnostic pop
 }

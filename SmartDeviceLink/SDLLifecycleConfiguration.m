@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark Lifecycle
 
-- (instancetype)initDefaultConfigurationWithAppName:(NSString *)appName appId:(NSString *)appId {
+- (instancetype)initDefaultConfigurationWithAppName:(NSString *)appName appId:(NSString *)appId transportType:(SDLTransportType)transportType {
     self = [super init];
     if (!self) {
         return nil;
@@ -49,16 +49,17 @@ NS_ASSUME_NONNULL_BEGIN
     _shortAppName = nil;
     _ttsName = nil;
     _voiceRecognitionCommandNames = nil;
+    _transportType = transportType;
 
     return self;
 }
 
-+ (SDLLifecycleConfiguration *)defaultConfigurationWithAppName:(NSString *)appName appId:(NSString *)appId {
-    return [[self alloc] initDefaultConfigurationWithAppName:appName appId:appId];
++ (SDLLifecycleConfiguration *)defaultConfigurationWithAppName:(NSString *)appName appId:(NSString *)appId transportType:(SDLTransportType)transportType {
+    return [[self alloc] initDefaultConfigurationWithAppName:appName appId:appId transportType:SDLTransportTypeTCP];
 }
 
 + (SDLLifecycleConfiguration *)debugConfigurationWithAppName:(NSString *)appName appId:(NSString *)appId ipAddress:(NSString *)ipAddress port:(UInt16)port {
-    SDLLifecycleConfiguration *config = [[self alloc] initDefaultConfigurationWithAppName:appName appId:appId];
+    SDLLifecycleConfiguration *config = [[self alloc] initDefaultConfigurationWithAppName:appName appId:appId transportType:SDLTransportTypeTCP];
     config.tcpDebugMode = YES;
     config.tcpDebugIPAddress = ipAddress;
     config.tcpDebugPort = port;
@@ -97,7 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark NSCopying
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    SDLLifecycleConfiguration *newConfig = [[self.class allocWithZone:zone] initDefaultConfigurationWithAppName:_appName appId:_appId];
+    SDLLifecycleConfiguration *newConfig = [[self.class allocWithZone:zone] initDefaultConfigurationWithAppName:_appName appId:_appId transportType:_transportType];
     newConfig->_tcpDebugMode = _tcpDebugMode;
     newConfig->_tcpDebugIPAddress = _tcpDebugIPAddress;
     newConfig->_tcpDebugPort = _tcpDebugPort;

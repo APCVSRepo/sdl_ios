@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation SDLProxyFactory
 
-+ (SDLProxy *)buildSDLProxyWithListener:(NSObject<SDLProxyListener> *)delegate {
++ (SDLProxy *)buildSDLProxyWithiAPListener:(NSObject<SDLProxyListener> *)delegate {
     SDLIAPTransport *transport = [[SDLIAPTransport alloc] init];
     SDLProtocol *protocol = [[SDLProtocol alloc] init];
     SDLProxy *ret = [[SDLProxy alloc] initWithTransport:transport protocol:protocol delegate:delegate];
@@ -20,9 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
     return ret;
 }
 
-+ (SDLProxy *)buildSDLProxyWithListener:(NSObject<SDLProxyListener> *)delegate
-                           tcpIPAddress:(NSString *)ipaddress
-                                tcpPort:(NSString *)port {
++ (SDLProxy *)buildSDLProxyWithTCPListener:(NSObject<SDLProxyListener> *)delegate
+                              tcpIPAddress:(NSString *)ipaddress
+                                   tcpPort:(NSString *)port {
     SDLTCPTransport *transport = [[SDLTCPTransport alloc] init];
     transport.hostName = ipaddress;
     transport.portNumber = port;
